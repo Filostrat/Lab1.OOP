@@ -19,6 +19,7 @@ namespace Lab1.OOP
             Max.LoseGame(Yarik, 30);
             Yarik.LoseGame(Sanya, 100);
 
+
             Max.GetStats();
             Sanya.GetStats();
             Yarik.GetStats();
@@ -48,46 +49,31 @@ namespace Lab1.OOP
 
         public void WinGame( GameAccount Opponent, double Rating)
         {
-            if (Rating >= 0)
-            {
-                if (Rating <= Opponent.GetRating()-1)
-                {
-                    var game = new Game(UserName, Opponent.UserName, UserName, Rating);
-                    Game.AllGame.Add(game);
-
-                    Opponent.CurrentRating.Add(-Rating);
-                    Opponent.GameCount++;
-                    CurrentRating.Add(Rating);
-                    GameCount++;
-                }
-                else
-                {
-                    Console.WriteLine($"The player {Opponent.UserName} does not have a sufficient rating");
-                }
-            }
-            else
-            {
-                Console.WriteLine("You can't play for a negative rating");
-            }
-
+            EventGame(this, Opponent, Rating);
         }
+
         public void LoseGame(GameAccount Opponent, double Rating)
         {
-            if (Rating >=0)
+            EventGame(Opponent, this, Rating);
+        }
+
+        private static void EventGame(GameAccount winner, GameAccount loser, double Rating)
+        {
+            if (Rating >= 0)
             {
-                if (Rating <= GetRating()-1)
+                if (Rating <= loser.GetRating() - 1)
                 {
-                    var game = new Game(UserName, Opponent.UserName, Opponent.UserName, Rating);
+                    var game = new Game(winner.UserName, loser.UserName, winner.UserName, Rating);
                     Game.AllGame.Add(game);
 
-                    Opponent.CurrentRating.Add(Rating);
-                    Opponent.GameCount++;
-                    CurrentRating.Add(-Rating);
-                    GameCount++;
+                    winner.CurrentRating.Add(Rating);
+                    winner.GameCount++;
+                    loser.CurrentRating.Add(-Rating);
+                    loser.GameCount++;
                 }
                 else
                 {
-                    Console.WriteLine($"The player {UserName} does not have a sufficient rating");
+                    Console.WriteLine($"The player {loser} does not have a sufficient rating");
                 }
             }
             else
@@ -112,7 +98,7 @@ namespace Lab1.OOP
             Console.WriteLine($"Game statistics for {UserName}");
             foreach (var item in Game.AllGame)
             {
-                if (item.OpponentOne == UserName || item.OpponentTwo== UserName)
+                if (item.FirstOpponent == UserName || item.SecondOpponent== UserName)
                 {
                     Console.WriteLine(item.ToString());
                 }
@@ -122,7 +108,7 @@ namespace Lab1.OOP
 
         public void PrintRating()
         {
-            Console.WriteLine($"{UserName} Rating {GetRating()}");
+            Console.WriteLine($"|UserName: {UserName,5} | Rating: {GetRating(),4} |");
         }
     }
     public class Game
@@ -131,16 +117,16 @@ namespace Lab1.OOP
         public static List<Game> AllGame = new();
 
         public int NumderGame { get; set; }
-        public string OpponentOne { get; set; }
-        public string OpponentTwo { get; set; }
+        public string FirstOpponent { get; set; }
+        public string SecondOpponent { get; set; }
         public string Winner { get; set; }
         public double Rating { get; set; }
         public DateTime Date { get; set; }
 
-        public Game(string OpponentOne, string OpponentTwo,string Winner, double Rating)
+        public Game(string FirstOpponent, string SecondOpponent,string Winner, double Rating)
         {
-            this.OpponentOne = OpponentOne;
-            this.OpponentTwo = OpponentTwo;
+            this.FirstOpponent = FirstOpponent;
+            this.SecondOpponent = SecondOpponent;
             this.Rating = Rating;
             this.Winner = Winner;           
             NumderGame = ++AllNumderGame;
@@ -172,7 +158,7 @@ namespace Lab1.OOP
 
         public override string ToString()
         {
-            return $"Game №{NumderGame} | Who: {OpponentOne,5} vs {OpponentTwo,5} |Rating: {Rating,4}| Winner: {Winner,5}| Date {Date,10}|"; 
+            return $"|Game №{NumderGame} | Who: {FirstOpponent,5} vs {SecondOpponent,5} |Rating: {Rating,4}| Winner: {Winner,5}| Date {Date,10}|"; 
         }
     }
 }
