@@ -5,7 +5,7 @@ namespace Lab1.OOP
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main( )
         {
             var Max = new GameAccount("Max");
             var Sanya = new GameAccount("Sanya");
@@ -35,10 +35,10 @@ namespace Lab1.OOP
     }
     public class GameAccount
     {
-        public string UserName { get; private set; }
-        public int GameCount { get ; private set; }
+        public string UserName { get; set; }
+        public int GameCount { get ; set; }
 
-        public List<double> CurrentRating = new List<double>();
+        public List<double> CurrentRating = new();
 
         public GameAccount(string UserName)
         {
@@ -80,18 +80,7 @@ namespace Lab1.OOP
             {
                 Console.WriteLine("You can't play for a negative rating");
             }
-        }
-
-        public double GetRating()
-        {
-            double Rating = 0;
-
-            foreach (var item in CurrentRating)
-            {
-                Rating += item;
-            }
-            return Rating;
-        }
+        }       
 
         public void GetStats()
         {
@@ -104,6 +93,17 @@ namespace Lab1.OOP
                 }
             }
             Console.WriteLine();
+        }
+
+        public double GetRating()
+        {
+            double Rating = 0;
+
+            foreach (var item in CurrentRating)
+            {
+                Rating += item;
+            }
+            return Rating;
         }
 
         public void PrintRating()
